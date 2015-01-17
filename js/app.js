@@ -91,7 +91,11 @@ function getUrlVars()
             
         };
         $scope.done = function(finished) {
-            $scope.finished = finished;
+            if ( typeof($scope.analysis.user) === "undefined" || typeof($scope.analysis.is_target) === "undefined") {
+                alert("You have not yet start the analysis!");
+                return;
+            }
+            
             $.ajax({
                 url: "finish_analysis.php",
                 type: "POST",
@@ -99,10 +103,15 @@ function getUrlVars()
                 async: false,
             })
              .done(function(response){
+                $scope.finished = response.finished;
                 $scope.submit();
                 $timeout(function() {
                     $scope.$apply();
                 }, 1000);
+//                debugger;
+                if ( $scope.finished == 1 ){
+                    window.location.href = window.list_page;
+                }
             });
         };
         

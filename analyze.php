@@ -18,10 +18,12 @@
 <script src="js/app.js"></script>
 
 <script type='text/javascript'>
+var sort, order;
 $(function(){
     sort = getUrlVars()["sort"];
     order = getUrlVars()["order"];
-    $("#back_list").prop("href", "view_list.php?sort=" + sort + "&order=" + order);
+    window.list_page = "view_list.php?sort=" + sort + "&order=" + order;
+    $("#back_list").prop("href", window.list_page);
 });
 </script>
 </head>
