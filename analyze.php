@@ -32,7 +32,7 @@ $(function(){
 
 <div id=pdf>
 <a class="btn btn-default" id=open_pdf target="_blank">Open in a new window</a> <br />
-<object id=pdf_file width=38% height=95% type='application/pdf'></object>
+<object id=pdf_file width=100% height=95% type='application/pdf'></object>
 </div>
 
 <div id=controlPanel>

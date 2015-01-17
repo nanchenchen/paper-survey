@@ -217,14 +217,14 @@ table {
     left: 10px;
     margin-right: 50px;
     height: 100%;
-    width: 100%;
-    z-index: 0;
+    width: 38%;
+    z-index: 1;
 }
 #form{
     margin-top: 80px;
     margin-left: 38%;
     min-width: 60%;
-    z-index: 100;
+    z-index: 1000;
 }
 #controlPanel{
     position: fixed;
@@ -233,7 +233,7 @@ table {
     padding-top: 5px;
     background-color: white;
     min-width: 60%;
-    z-index: 1000;
+    z-index: 2000;
 }
 #save{
     float: right;
