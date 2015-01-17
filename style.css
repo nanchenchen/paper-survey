@@ -217,19 +217,20 @@ table {
     left: 10px;
     margin-right: 50px;
     height: 100%;
+    width: 100%;
 }
 #form{
     margin-top: 80px;
-    margin-left: 670px;
-    width: 600px;
+    margin-left: 38%;
+    min-width: 60%
 }
 #controlPanel{
     position: fixed;
     top: 0px;
-    left: 670px;
+    left: 39%;
     padding-top: 5px;
     background-color: white;
-    width: 650px;
+    min-width: 60%
 }
 #save{
     float: right;

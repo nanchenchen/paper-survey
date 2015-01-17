@@ -57,9 +57,9 @@ if (strcmp($sort_c, "date") != 0)
 
 echo "<table class=bordered>";
 echo "<tr>";
-$th   = array("Last Edit", "id", "Title", "Year", "Authors", "Type", "Publication", "Citation Count", "");
-$th_v = array("analyzed", "id", "title", "date", "authors", "type", "publication", "citation_count", "");
-$th_w = array("12%", "3%", "39.3%", "3%", "16.1%", "8.1%", "19.8%", "3%", "2%");
+$th   = array("Finished", "Last Edit", "id", "Title", "Year", "Authors", "Type", "Publication", "Citation Count", "");
+$th_v = array("finished", "last_edit", "id", "title", "date", "authors", "type", "publication", "citation_count", "");
+$th_w = array("3%", "12%", "3%", "39.3%", "3%", "16.1%", "8.1%", "19.8%", "3%", "2%");
 $th_n = count($th);
 for ($i = 0 ; $i < $th_n ; $i++)
 {
@@ -85,7 +85,9 @@ while ($row = mysql_fetch_assoc($query))
 	$id = $row['id'];
 	echo "<tr id='item$id' value=$id class='item' >";
     echo "<td>";
-    //if ( $row['analyzed'] ) echo "v";
+    if ( $row['finished'] ) echo "v";
+    echo "</td>";
+    echo "<td>";
     $sql2 = "SELECT `user`, `timestamp` FROM `social_science_paper_analysis` WHERE `paper_id`=$id";
     $query2 = mysql_query($sql2);
     if ( $query2 && $row2 = mysql_fetch_assoc($query2) ){

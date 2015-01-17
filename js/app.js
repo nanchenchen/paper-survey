@@ -12,9 +12,10 @@ function getUrlVars()
 }
 (function(){
     var app = angular.module('questionnaire', []);
-    app.controller('FormController', function(){
+    app.controller('FormController', ['$scope', '$interval', function($scope, $interval){
         var ctrl = this;
-        ctrl.analysis = {};
+        $scope.formChanged = false;
+        $scope.analysis = {};
         $.ajax({
             url: "get_paper_data.php",
             type: "GET",
@@ -22,10 +23,11 @@ function getUrlVars()
             async: false,
         })
          .done(function(response){
-            ctrl.paper = response;
-            ctrl.paper.attachments = "pdfs/" + encodeURIComponent(ctrl.paper.attachments);          
-            $("#pdf_file").prop("data", ctrl.paper.attachments);
-            $("#open_pdf").prop("href", ctrl.paper.attachments);
+            $scope.paper = response;
+            $scope.paper.attachments = "pdfs/" + encodeURIComponent($scope.paper.attachments);  
+            $scope.finished = response.finished;           
+            $("#pdf_file").prop("data", $scope.paper.attachments);
+            $("#open_pdf").prop("href", $scope.paper.attachments);
         });
         $.ajax({
             url: "get_paper_analysis.php",
@@ -36,47 +38,82 @@ function getUrlVars()
          .done(function(response){
             //debugger;
             if ( typeof(response.user) !== "undefined" )
-                ctrl.last_user = response.user;
+                $scope.last_user = response.user;
             if ( typeof(response.timestamp) !== "undefined" )
-                ctrl.last_time = response.timestamp;
+                $scope.last_time = response.timestamp;
             if ( typeof(response.analysis) !== "undefined" )
-                ctrl.analysis = JSON.parse(response.analysis);           
+                $scope.analysis = JSON.parse(response.analysis);           
         });   
-        ctrl.isTarget = function(){
-            if ( typeof(ctrl.analysis.is_target) === "undefined" ) return false;
-            else return ctrl.analysis.is_target == 1;
+        $scope.isTarget = function(){
+            if ( typeof($scope.analysis.user) === "undefined" || typeof($scope.analysis.is_target) === "undefined" ) return false;
+            else return $scope.analysis.is_target == 1;
         };
         
-        ctrl.users = ["Michael", "Jeff", "Zening", "Rafal", "Nan-Chen", "Sanny"];
-        ctrl.data_sources = ["Twitter", "Facebook", "Chat", "Emails", "Blogs", "Forums"];
-        ctrl.other_aspects = ["Profiles / Users / People", "Connections / Networks"];
-        ctrl.primary_concerns = ["Offline social phenomena","Online social phenomena", "Computational data processing technique", "Research methodology"];
-        ctrl.methods_us = [ 
+        $scope.users = ["Michael", "Jeff", "Zening", "Rafal", "Nan-Chen", "Sanny"];
+        $scope.data_sources = ["Twitter", "Facebook", "Chat", "Emails", "Blogs", "Forums"];
+        $scope.other_aspects = ["Profiles / Users / People", "Connections / Networks"];
+        $scope.primary_concerns = ["Offline social phenomena","Online social phenomena", "Computational data processing technique", "Research methodology"];
+        $scope.methods_us = [ 
             {name: "modeling", desc: "Modeling (e.g. machine learning models, topic models...)"}, 
             {name: "stats", desc: "Statistical analysis (e.g. descriptive statistics, comparing two subgroups)"}, 
             {name: "sna", desc: "Social network analysis (e.g. centrality)"}, 
             {name: "human", desc: "Human interpretation (e.g. qualitative coding, close reading)"}];
-        ctrl.result_presentations = ["Simple charts and graphs", "More complex visualizations", "Tables", "Quotations or excerpts", "Statistical results", "Narrative accounts"];
-        
-        ctrl.submit = function() {
+        $scope.result_presentations = ["Simple charts and graphs", "More complex visualizations", "Tables", "Quotations or excerpts", "Statistical results", "Narrative accounts"];
+        $scope.isFinished = function(){
+            return $scope.finished == 1 || $scope.finished == true;
+        };
+        $scope.submit = function() {
+            if ( $scope.formChanged == false ) return;
             //debugger;
-            if ( typeof(ctrl.analysis.user) === "undefined" ){
+            if ( typeof($scope.analysis.user) === "undefined" ){
                 alert("Please choose who you are!");
                 return;
             }
-            ctrl.analysis.paper_id = getUrlVars()["id"];
+            $scope.analysis.paper_id = getUrlVars()["id"];
             $.ajax({
                 url: "save_analysis.php",
                 type: "POST",
-                data: JSON.stringify(ctrl.analysis),
+                data: JSON.stringify($scope.analysis),
                 async: false,
             })
              .done(function(response){
                 //console.log(response);
                 //debugger;
+                if ( typeof(response.user) !== "undefined" )
+                    $scope.last_user = response.user;
+                if ( typeof(response.timestamp) !== "undefined" )
+                    $scope.last_time = response.timestamp;
+                $scope.formChanged = false;
+                $scope.$apply();
             });
             
         };
-    });
-    
+        $scope.done = function(finished) {
+            $scope.finished = finished;
+            $.ajax({
+                url: "finish_analysis.php",
+                type: "POST",
+                data: {"id": getUrlVars()["id"], "finished": finished},
+                async: false,
+            })
+             .done(function(response){
+                $scope.submit();
+                $scope.$apply();
+            });
+        };
+        
+        $(function(){
+            $( "input" ).change(function() {        
+                $scope.formChanged = true;
+            });
+            $( "textarea" ).change(function() {        
+                $scope.formChanged = true;
+            });
+        });
+        $scope.$watch(function($scope){ return $scope.formChanged}, function(value){
+            if ( $scope.formChanged && typeof($scope.analysis.user) !== "undefined" && typeof($scope.analysis.is_target) !== "undefined" )
+                $scope.submit();
+        });
+    }]);
+   
 })();
