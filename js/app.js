@@ -12,7 +12,7 @@ function getUrlVars()
 }
 (function(){
     var app = angular.module('questionnaire', []);
-    app.controller('FormController', ['$scope', '$interval', function($scope, $interval){
+    app.controller('FormController', ['$scope', '$timeout', function($scope, $timeout){
         var ctrl = this;
         $scope.formChanged = 0;
         $scope.analysis = {};
@@ -84,7 +84,9 @@ function getUrlVars()
                 if ( typeof(response.timestamp) !== "undefined" )
                     $scope.last_time = response.timestamp;
                 $scope.formChanged = 0;
-                $scope.$apply();
+                $timeout(function() {
+                    $scope.$apply();
+                }, 1000);
             });
             
         };
@@ -98,7 +100,9 @@ function getUrlVars()
             })
              .done(function(response){
                 $scope.submit();
-                $scope.$apply();
+                $timeout(function() {
+                    $scope.$apply();
+                }, 1000);
             });
         };
         
