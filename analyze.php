@@ -18,8 +18,11 @@
 <script src="js/app.js"></script>
 
 <script type='text/javascript'>
-
-
+$(function(){
+    sort = getUrlVars()["sort"];
+    order = getUrlVars()["order"];
+    $("#back_list").prop("href", "view_list.php?sort=" + sort + "&order=" + order);
+});
 </script>
 </head>
 <body>
@@ -31,7 +34,7 @@
 </div>
 
 <div id=controlPanel>
-<a class="btn btn-default" href=view_list.php>←Back to list</a>
+<a id=back_list class="btn btn-default" >←Back to list</a>
 <div id=save>
 
 <span id=last_time><small ng-show="last_user">Last modified by {{ last_user }} at {{ last_time }}</small></span>

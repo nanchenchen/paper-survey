@@ -102,7 +102,8 @@ while ($row = mysql_fetch_assoc($query))
 	echo "<td>" . $row['type'] . "</td>";
 	echo "<td>" . $row['publication'] . "</td>";
 	echo "<td>" . $row['citation_count'] . "</td>";
-    echo "<td>" . "<a class='btn btn-primary' href='analyze.php?id=" . $row['id'] . "'>" . "Analyze→" . "</a>" . "</td>";
+    $sort_str = "sort=$sort_c&order=$order";
+    echo "<td>" . "<a class='btn btn-primary' href='analyze.php?id=" . $row['id'] . "&$sort_str'>" . "Analyze→" . "</a>" . "</td>";
 	echo "</tr>\n";
 	echo "<tr class=note_tr id=note_tr$id>";
 	echo "<td colspan=8>";
