@@ -56,8 +56,8 @@ $(function(){
         </li>
         <li class="item form-group">
             <div class=question>Does the paper use data to study Posts / Messages / Content?</div>
-            <input ng-model="analysis.is_target" type=radio id=for_content value=1 required />Yes 
-            <input ng-model="analysis.is_target" type=radio id=for_content value=0 required />No
+            <label class="option"><input ng-model="analysis.is_target" type=radio id=for_content value=1 required />Yes</label> 
+            <label class="option"><input ng-model="analysis.is_target" type=radio id=for_content value=0 required />No</label>
         </li>
         <div ng-show="isTarget()">
 
@@ -134,8 +134,8 @@ $(function(){
         
         <li class="item form-group">
             <div class=question>Should we look at the visualizations? </div>
-            <input ng-model="analysis.contains_vis" type=radio id=contains_vis value=1 />Yes 
-            <input ng-model="analysis.contains_vis" type=radio id=contains_vis value=0 />No
+            <label class="option"><input ng-model="analysis.contains_vis" type=radio id=contains_vis value=1 />Yes</label> 
+            <label class="option"><input ng-model="analysis.contains_vis" type=radio id=contains_vis value=0 />No</label>
         </li>
         <li class="item form-group">
             <div class=question>
