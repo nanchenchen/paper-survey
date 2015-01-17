@@ -14,7 +14,7 @@ function getUrlVars()
     var app = angular.module('questionnaire', []);
     app.controller('FormController', ['$scope', '$interval', function($scope, $interval){
         var ctrl = this;
-        $scope.formChanged = false;
+        $scope.formChanged = 0;
         $scope.analysis = {};
         $.ajax({
             url: "get_paper_data.php",
@@ -63,8 +63,8 @@ function getUrlVars()
             return $scope.finished == 1 || $scope.finished == true;
         };
         $scope.submit = function() {
-            if ( $scope.formChanged == false ) return;
             //debugger;
+            if ( $scope.formChanged == 0 ) return;
             if ( typeof($scope.analysis.user) === "undefined" ){
                 alert("Please choose who you are!");
                 return;
@@ -83,7 +83,7 @@ function getUrlVars()
                     $scope.last_user = response.user;
                 if ( typeof(response.timestamp) !== "undefined" )
                     $scope.last_time = response.timestamp;
-                $scope.formChanged = false;
+                $scope.formChanged = 0;
                 $scope.$apply();
             });
             
@@ -104,13 +104,14 @@ function getUrlVars()
         
         $(function(){
             $( "input" ).change(function() {        
-                $scope.formChanged = true;
+                $scope.formChanged += 1;
             });
             $( "textarea" ).change(function() {        
-                $scope.formChanged = true;
+                $scope.formChanged += 1;
             });
         });
         $scope.$watch(function($scope){ return $scope.formChanged}, function(value){
+            //debugger;
             if ( $scope.formChanged && typeof($scope.analysis.user) !== "undefined" && typeof($scope.analysis.is_target) !== "undefined" )
                 $scope.submit();
         });
