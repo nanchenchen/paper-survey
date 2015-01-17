@@ -58,7 +58,7 @@ if (strcmp($sort_c, "date") != 0)
 echo "<table class=bordered>";
 echo "<tr>";
 $th   = array("Finished", "Last Edit", "id", "Title", "Year", "Authors", "Type", "Publication", "Citation Count", "");
-$th_v = array("finished", "last_edit", "id", "title", "date", "authors", "type", "publication", "citation_count", "");
+$th_v = array("finished", "timestamp", "id", "title", "date", "authors", "type", "publication", "citation_count", "");
 $th_w = array("3%", "12%", "3%", "39.3%", "3%", "16.1%", "8.1%", "19.8%", "3%", "2%");
 $th_n = count($th);
 for ($i = 0 ; $i < $th_n ; $i++)
@@ -68,11 +68,19 @@ for ($i = 0 ; $i < $th_n ; $i++)
 	if ( ((!strcmp($th_v[$i], $sort_c)) && !strcmp($order, "ASC")) ||
 		(!strcmp($th_v[$i], "citation_count")) && (strcmp($sort_c, "citation_count") != 0) )
 		$o = "DESC";
+    if ( strcmp($th_v[$i], "timestamp" ) )    
 	echo "<a href='view_list.php?sort=".$th_v[$i] . "&order=$o'>";
 	echo "<div>";
 
 	echo $th[$i];
+    if (!strcmp($th_v[$i], $sort_c)){
+        if (!strcmp($order, "ASC"))
+            echo "↓";
+        else
+            echo "↑";
+    }
 	echo "</div>";
+    if ( strcmp($th_v[$i], "timestamp" ) )
 	echo "</a>";
 	echo "</th>";
 }
